@@ -7,9 +7,7 @@ This bibliography compiles the articles reviewed on Internet of Things in Health
 ### References
 1.- Article that makes a literature overview about the different sensors, architectures, and security concerns on IoTHealth systems. 
 
-2.- Summary
-
-This article reviews the use of wearable devices to detect and monitor stress, highlighting five key stages: physiological data collection (in controlled and real-world settings), preprocessing (signal filtering and normalization), feature extraction (HRV statistics, tonic/phasic EDA features, among others), machine learning model training (traditional classifiers and deep learning), and performance evaluation. It also addresses challenges such as personalization, real-time detection, and the integration of privacy and usability in real-world applications.
+2.- This article reviews the use of wearable devices to detect and monitor stress, highlighting five key stages: physiological data collection (in controlled and real-world settings), preprocessing (signal filtering and normalization), feature extraction (HRV statistics, tonic/phasic EDA features, among others), machine learning model training (traditional classifiers and deep learning), and performance evaluation. It also addresses challenges such as personalization, real-time detection, and the integration of privacy and usability in real-world applications.
 
 ```bibtex
 @article{Rehman2025IoTHealth,
@@ -38,3 +36,25 @@ This article reviews the use of wearable devices to detect and monitor stress, h
 - **Pending Article 1:** [Title or brief description of the article].
 - **Pending Article 2:** [Title or brief description of the article].
 - **Pending Article 3:** [Title or brief description of the article].
+
+
+
+## Literature to Review
+
+- **Chacon, P. C., Aguileta, A., Moo, F., & Aguilar, R. (2025):** Systematic literature review of mental stress recognition using wearable sensor data fusion. *International Journal of Combinatorial Optimization Problems and Informatics, 16(2), 98.*  
+  [Link](https://search.proquest.com/openview/b8203ad65e877201e27ba0f18906bd9c/1?pq-origsite=gscholar&cbl=696410)
+
+- **Smets, E., Rios Velazquez, E., Schiavone, G., Chakroun, I., D’Hondt, E., De Raedt, W., ... & Van Hoof, C. (2018):** Large-scale wearable data reveal digital phenotypes for daily-life stress detection. *NPJ Digital Medicine, 1(1), 67.*  
+  [Link](https://scholar.google.es/scholar?output=instlink&q=info:0J63vcjZMsYJ:scholar.google.com/&hl=es&as_sdt=0,5&scillfp=13313851419359735860&oi=lle)
+
+- **Schmidt, P., Reiss, A., Duerichen, R., Marberger, C., & Van Laerhoven, K. (2018):** Introducing WESAD, a Multimodal Dataset for Wearable Stress and Affect Detection. *Proceedings of the 20th ACM International Conference on Multimodal Interaction, 400-408.*  
+  [Link](https://doi.org/10.1145/3242969.3242985)
+
+- **PJ, S. (2021):** Swell dataset analysis for stress prediction.  
+  [Link](https://www.kaggle.com/code/shreyaspj/swell-dataset-analysis-for-stress-prediction)
+
+- **Dahal, K., Bogue-Jimenez, B., & Doblas, A. (2023):** Global stress detection framework combining a reduced set of HRV features and random forest model. *Sensors, 23(11), 5220.*  
+  [Link](https://www.mdpi.com/1424-8220/23/11/5220/pdf)
+
+- **Abd-Alrazaq, A., Alajlani, M., Ahmad, R., AlSaad, R., Aziz, S., Ahmed, A., ... & Sheikh, J. (2024):** The performance of wearable AI in detecting stress among students: systematic review and Meta-analysis. *Journal of Medical Internet Research, 26, e52622.*  
+  [Link](https://doi.org/10.2196/52622)
