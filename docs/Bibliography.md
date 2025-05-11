@@ -3,7 +3,7 @@
 This bibliography compiles the articles reviewed on Internet of Things in Healthcare, with a focus on system sensor architectures and security considerations.
 
 ## Reviewed Literature
-
+We took into account literature reviews from  2020-2025 5 years and datasets from 2010 to todays date. 
 ### References
 1.- Article that makes a literature overview about the different sensors, architectures, and security concerns on IoTHealth systems. 
 
@@ -11,6 +11,7 @@ This bibliography compiles the articles reviewed on Internet of Things in Health
 
 3.- This systematic literature review synthesizes state-of-the-art methods for mental-stress recognition using data-fusion of wearable sensor signals and machine learning. It defines seven research questions covering fusion strategies, classifier choices, sensor modalities, temporal segmentation, evaluation metrics and classifier performance. After screening 163 Scopus results (49 included studies), the review reports prevailing practices—feature-level fusion, widely used classifiers (SVM, Random Forest, KNN), ECG/EEG sensors, overlapping and uniform time windows—and summarizes typical model accuracies and future research directions.
 
+4.- Large Scale study where they created a dataset measuring a lot of complex values from 1,002 healthy office workers and monitoring them continuously for five days to capture natural variations. see [datasets](./datasets.md)  for more info.( I could not find the dataset link anywhere.)
 ```bibtex
 @article{Rehman2025IoTHealth,
   author  = {Rehman, Attiq Ur and Lu, Songfeng and Bin Heyat, Md Belal and Iqbal, Muhammad Shahid and Parveen, Saba and Bin Hayat, Mohd Ammar and Akhtar, Faijan and Ashraf, Muhammad Awais and Khan, Owais and Pomary, Dustin and Sawan, Mohamad},
@@ -42,23 +43,24 @@ This bibliography compiles the articles reviewed on Internet of Things in Health
   year    = {2025},
   url     = {https://search.proquest.com/openview/b8203ad65e877201e27ba0f18906bd9c/1?pq-origsite=gscholar&cbl=696410}
 }
+
+@article{Smets2018DigitalPhenotypes,
+  author  = {Smets, E. and Rios Velazquez, E. and Schiavone, G. and Chakroun, I. and D’Hondt, E. and De Raedt, W. and Van Hoof, C.},
+  title   = {Large-scale wearable data reveal digital phenotypes for daily-life stress detection},
+  journal = {NPJ Digital Medicine},
+  volume  = {1},
+  number  = {1},
+  pages   = {67},
+  year    = {2018},
+  url     = {https://scholar.google.es/scholar?output=instlink&q=info:0J63vcjZMsYJ:scholar.google.com/&hl=es&as_sdt=0,5&scillfp=13313851419359735860&oi=lle}
+}
 ```
 
-## Literature to Review
 
-- **Pending Article 1:** [Title or brief description of the article].
-- **Pending Article 2:** [Title or brief description of the article].
-- **Pending Article 3:** [Title or brief description of the article].
 
 
 
 ## Literature to Review
-
-- **Chacon, P. C., Aguileta, A., Moo, F., & Aguilar, R. (2025):** Systematic literature review of mental stress recognition using wearable sensor data fusion. *International Journal of Combinatorial Optimization Problems and Informatics, 16(2), 98.*  
-  [Link](https://search.proquest.com/openview/b8203ad65e877201e27ba0f18906bd9c/1?pq-origsite=gscholar&cbl=696410)
-
-- **Smets, E., Rios Velazquez, E., Schiavone, G., Chakroun, I., D’Hondt, E., De Raedt, W., ... & Van Hoof, C. (2018):** Large-scale wearable data reveal digital phenotypes for daily-life stress detection. *NPJ Digital Medicine, 1(1), 67.*  
-  [Link](https://scholar.google.es/scholar?output=instlink&q=info:0J63vcjZMsYJ:scholar.google.com/&hl=es&as_sdt=0,5&scillfp=13313851419359735860&oi=lle)
 
 - **Schmidt, P., Reiss, A., Duerichen, R., Marberger, C., & Van Laerhoven, K. (2018):** Introducing WESAD, a Multimodal Dataset for Wearable Stress and Affect Detection. *Proceedings of the 20th ACM International Conference on Multimodal Interaction, 400-408.*  
   [Link](https://doi.org/10.1145/3242969.3242985)
