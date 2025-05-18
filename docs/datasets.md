@@ -1,3 +1,8 @@
+# Datasets Index
+
+- [SWEET Study Dataset](#sweet-study-dataset)
+- [WESAD Dataset Summary](#wesad-dataset-details)
+- [SWELL Dataset Summary](#swell-kw-hrv)
 ## SWEET Study Dataset 
 - **Purpose:** Traditional stress studies are small and lab-based. The SWEET study measured stress in real life at scale, recruiting 1,002 healthy office workers and monitoring them continuously for five days to capture natural variations in physiology and context. :contentReference[oaicite:0]{index=0}:contentReference[oaicite:1]{index=1}  
 - **Protocol:** Each subject wore two devices: a chest patch (ECG @256 Hz + accelerometer @32 Hz) and a wristband (skin conductance @256 Hz, skin temperature @1 Hz, accelerometer @32 Hz). They answered brief stress/emotion surveys (EMAs) 12×/day, plus morning sleep and evening GI symptom diaries. Smartphone data (location clusters, phone usage, audio features, call/SMS logs) and baseline questionnaires (PSS, PSQI, DASS, RAND-36) were also collected. :contentReference[oaicite:2]{index=2}:contentReference[oaicite:3]{index=3}  
@@ -47,3 +52,110 @@
 | **baseline_dass_stress**     | integer    | DASS stress subscale score                                                                      |
 | **rand36_physical**          | integer    | RAND-36 physical health component score                                                         |
 | **rand36_mental**            | integer    | RAND-36 mental health component score 
+
+---
+## WESAD Dataset Details
+
+WESAD (Wearable Stress and Affect Detection) is a publicly available multimodal dataset designed for automatic recognition of stress and emotional states using wearable sensors. In a controlled lab protocol, 15 healthy adults wore both chest (RespiBAN) and wrist (Empatica E4) devices while experiencing three conditions—neutral baseline, induced stress (Trier Social Stress Test), and amusement (funny videos)—with guided respites in between. Continuous recordings of physiological signals (ECG, respiration, EMG, EDA, temperature, accelerometer, BVP) were collected alongside validated self-reports (PANAS, STAI, SAM, SSSQ). Data were windowed (60 s windows with 0.25 s shift for physiological signals; 5 s for accelerometer), cleaned, and z-normalized per subject. Baseline benchmarking with Decision Tree, Random Forest, AdaBoost, LDA, and kNN under a leave-one-subject-out scheme achieved up to 80 % accuracy (three-class) and 93 % (binary stress vs. non-stress), highlighting high inter-subject variability and the need for personalized models.
+
+
+
+Each subject’s data are provided as a Python pickle containing:
+- `data`: a NumPy array of shape (samples × variables)  
+- `labels`: a vector of affective state labels  
+- `header`: a dictionary with `sampling_rate`, `start_time`, and channel names  
+
+The following variables appear in `data` (all sampled at the rates indicated in `header`):
+
+| Variable        | Type      | Description                                                      |
+|-----------------|-----------|------------------------------------------------------------------|
+| subject_id      | integer   | Unique ID for each of the 15 participants                        |
+| timestamp       | datetime  | Sampling timestamp (UTC)                                         |
+| ACC_wrist_x     | float     | Wrist accelerometer X-axis (g)                                   |
+| ACC_wrist_y     | float     | Wrist accelerometer Y-axis (g)                                   |
+| ACC_wrist_z     | float     | Wrist accelerometer Z-axis (g)                                   |
+| BVP             | float     | Blood volume pulse from wrist (arbitrary units)                  |
+| EDA_wrist       | float     | Electrodermal activity at wrist (µS)                            |
+| TEMP_wrist      | float     | Skin temperature at wrist (°C)                                   |
+| ACC_chest_x     | float     | Chest accelerometer X-axis (g)                                   |
+| ACC_chest_y     | float     | Chest accelerometer Y-axis (g)                                   |
+| ACC_chest_z     | float     | Chest accelerometer Z-axis (g)                                   |
+| ECG             | float     | Electrocardiogram from chest (mV)                                |
+| RESP            | float     | Respiration from chest (inductive sensor units)                  |
+| EMG             | float     | Electromyography from chest (mV)                                 |
+| TEMP_chest      | float     | Skin/chest temperature (°C)                                      |
+| label           | integer   | Affective state: 0 = baseline, 1 = stress, 2 = amusement         |
+| PANAS_positive  | integer   | PANAS positive affect score (post-condition)                     |
+| PANAS_negative  | integer   | PANAS negative affect score (post-condition)                     |
+| STAI            | integer   | State-Trait Anxiety Inventory score (post-condition)             |
+| SAM_valence     | integer   | SAM valence rating (1 = unpleasant … 9 = pleasant)               |
+| SAM_arousal     | integer   | SAM arousal rating (1 = calm … 9 = excited)                      |
+| SSSQ            | string    | Short Stress State Questionnaire category                        |
+
+**Note:** All signals were preprocessed with band-pass filters, artifact detection, and per-subject z-normalization. The dataset and full documentation are available at:  
+https://ubicomp.eti.uni-siegen.de/home/datasets/icmi18/  
+
+---
+## SWELL-KW HRV
+
+The SWELL-KW HRV Dataset provides heart rate variability (HRV) indices computed from ECG recordings of 25 office workers under three typical workplace conditions: 
+
+- **No Stress**: unrestricted work time (up to 45 min).  
+- **Time Pressure**: time to complete tasks reduced to two-thirds of the neutral condition.  
+- **Interruption**: eight unexpected email interruptions (some task-relevant, some irrelevant).
+
+Data were collected during realistic “knowledge work” (writing reports, presentations, e-mails, information search) and accompanied by subjective ratings of task load, mental effort, emotion, and perceived stress.
+
+
+
+## Data & Files
+
+- **train.csv**: 369,289 sliding 5-minute windows × 36 HRV features  
+- **test.csv**:  41,033 sliding 5-minute windows × 36 HRV features  
+
+Each row corresponds to a 5 min IBI (inter-beat interval) window, updated sample by sample (oldest IBI dropped, newest appended) to produce granular HRV time series.
+
+---
+
+## Features (36 HRV Indices)
+
+| Feature        | Description                                       |
+|----------------|---------------------------------------------------|
+| MEAN_RR        | Mean RR interval (ms)                             |
+| MEDIAN_RR      | Median RR interval (ms)                           |
+| SDRR           | SD of RR intervals (ms)                           |
+| RMSSD          | RMS of successive RR differences (ms)             |
+| SDSD           | SD of successive RR differences (ms)              |
+| SDRR_RMSSD     | Ratio SDRR / RMSSD                                |
+| HR             | Mean heart rate (beats per minute)                |
+| pNN25, pNN50   | % successive RR differences >25 ms / >50 ms       |
+| SD1, SD2       | Poincaré plot descriptors                         |
+| VLF, LF, HF, TP| Power in VLF, LF, HF bands and total power (ms²)  |
+| VLF_PCT,...    | VLF/LF/HF as % of total power                     |
+| HF_NU          | HF power in normalized units                      |
+| LF_HF, HF_LF   | LF/HF and HF/LF ratios                            |
+| sampen         | Approximate entropy                               |
+| higuci         | Higuchi fractal dimension                         |
+| datasetId      | Internal session/subject identifier               |
+| condition      | “no stress” / “interruption” / “time pressure”    |
+
+---
+
+## HRV Computation & Preprocessing
+
+1. **IBI Extraction**: detect R-peaks in ECG to form IBI time series.  
+2. **Sliding Windows**: compute all indices over 5 min windows, sliding sample-by-sample.  
+3. **Cleaning**: discard windows with artifacts or poor ECG quality.  
+4. **Normalization**: metrics can be z-normalized per subject for analysis.
+
+---
+
+## Example Usage & Performance
+
+A Random Forest classifier trained on a subset of seven features (selected via Pearson correlation to `condition`) achieved 100 % accuracy and perfect F1 scores on the test set—demonstrating both the dataset’s richness and the risk of overfitting given class imbalance and large sample count.
+
+---
+
+**Access & Citation**  
+The original SWELL-KW dataset and accompanying papers can be found at:  
+http://cs.ru.nl/~skoldijk/SWELL-KW/Dataset.html  
