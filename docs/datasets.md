@@ -159,3 +159,14 @@ A Random Forest classifier trained on a subset of seven features (selected via P
 **Access & Citation**  
 The original SWELL-KW dataset and accompanying papers can be found at:  
 http://cs.ru.nl/~skoldijk/SWELL-KW/Dataset.html  
+
+
+## Comparative 
+| Dataset           | Subjects | Devices / Sensors                                                                                 | Protocol & Duration                                                                      | Windowing                                         | Features (# & type)                                             | Labels / Conditions                             | Size & Link                                                                      |
+|-------------------|----------|---------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------|---------------------------------------------------|-----------------------------------------------------------------|--------------------------------------------------|-----------------------------------------------------------------------------------|
+| **SWEET Study**   | 1 002    | Chest patch (ECG 256 Hz, ACC 32 Hz); Wristband (SC 256 Hz, ST 1 Hz, ACC 32 Hz); Smartphone logs   | 5 days continuous; 12 EMAs/day + morning/evening diaries                                 | 5 min windows, 4 min overlap (QI ≥ 80 %, ACC_SD ≤ 0.04) | 19 physio features (6 ECG-HRV, 8 SC, 4 ST, 1 ACC_SD)            | Stress (1–3), pleasure (1–5), arousal (1–5), activities, intake events | Bajo acuerdo con autores (no público)                                             |
+| **WESAD**         | 15       | Chest (RespiBAN™: ECG, RESP, EMG, EDA, TEMP, ACC); Wrist (Empatica E4: BVP, EDA, TEMP, ACC)          | Lab: baseline / stress (Trier) / amusement + guided breaks                                | 60 s windows, 0.25 s shift (physio); 5 s windows (ACC)  | 12 channels (ECG, RESP, EMG, EDA, BVP, TEMP, ACC)              | Baseline / stress / amusement (3-way)             | ~3.5 M samples (~2 GB)  
+[descarga ↗](https://ubicomp.eti.uni-siegen.de/home/datasets/icmi18/) |
+| **SWELL-KW HRV**  | 25       | ECG → IBI series → HRV                                                                             | Office tasks: no stress / time pressure / email interruptions (≈45 min cada condición)   | 5 min sliding windows (uno por cada nuevo IBI)       | 36 HRV indices (time & freq domain + entropy, fractal)        | No-stress / time-pressure / interruption (3-way) | Train: 369 289 ventanas  
+Test: 41 033 ventanas  
+[descarga ↗](http://cs.ru.nl/~skoldijk/SWELL-KW/Dataset.html) |
