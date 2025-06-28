@@ -262,3 +262,112 @@ You can implement this federated learning system using the following technologie
   - **Helm** charts for Kubernetes deployments.
 
 ---
+
+## Federated Learning System Overview
+
+This document describes each component in our federated-transfer learning pipeline for stress detection and shows how data moves through the system.
+
+---
+
+### 1. Node Descriptions
+
+- **Hospital Edge Client**  
+  Holds private 5 min windows of raw ECG/EDA/ACC features. Runs on-site training to produce model updates—no raw data ever leaves.
+
+- **Global Encoder**  
+  A shared feature extractor (e.g. 1D-CNN) stored in the cloud. Clients download it for federated pre-training.
+
+- **Stress Classifier Head**  
+  A small, client-specific layer on top of the encoder that outputs stress predictions.
+
+- **FL Agent**  
+  Client-side software that orchestrates two phases:  
+  1. **Phase 1**: Federated pre-training of the encoder  
+  2. **Phase 2**: Local fine-tuning of the stress head  
+  It computes weight deltas (Δθ) and packages them for secure upload.
+
+- **Local Updates (Δθ)**  
+  Encrypted weight differences for encoder or head—no raw signals included.
+
+- **MQTT/gRPC Broker**  
+  Reliable messaging layer handling intermittent connectivity.
+
+- **Aggregation Server**  
+  Collects updates from selected clients each round.
+
+- **FedAvg / FedProx Aggregator**  
+  Averages client updates (weighted by sample count) into new global parameters.
+
+- **Cloud Storage (S3/GCS)**  
+  Persists encoder & head checkpoints and round metadata.
+
+---
+
+### 2. System Workflow
+
+#### **Phase 1: Federated Encoder Pre-training**
+1. **Download encoder**  
+   Clients fetch the latest encoder (θ_enc).
+2. **Local encoder training**  
+   Train on raw windows (e.g. reconstruction or proxy task).
+3. **Compute Δθ_enc**  
+   Calculate encrypted encoder weight deltas.
+4. **Upload Δθ_enc**  
+   Send through broker to aggregation server.
+5. **Aggregate encoder**  
+   FedAvg/FedProx → new θ_enc.
+6. **Version & store**  
+   Save updated encoder to S3/GCS.
+
+#### **Phase 2: Local Stress-Head Fine-tuning**
+1. **Download frozen encoder**  
+   Load θ_enc (no further encoder updates).
+2. **Local head training**  
+   Train stress classifier head on embeddings.
+3. **Compute Δθ_head**  
+   Calculate encrypted head weight deltas.
+4. **Upload Δθ_head**  
+   Send through broker.
+5. **Aggregate head**  
+   FedAvg → new θ_head.
+6. **Version & store**  
+   Save updated head for deployment.
+
+*(Optional Phase 3: Unfreeze some encoder layers and repeat fine-tuning.)*
+
+---
+
+### 3. Flowchart
+
+```mermaid
+flowchart TD
+  subgraph "Phase 1: Encoder Pre-training"
+    A1["Clients download θ_enc"]
+    A2["Local encoder training"]
+    A3["Compute Δθ_enc"]
+    A4["Upload Δθ_enc"]
+    A1 --> A2 --> A3 --> A4
+  end
+
+  subgraph Broker
+    A4 --> B["Aggregation Server"]
+  end
+
+  subgraph Cloud
+    B --> C1["FedAvg/FedProx aggregate θ_enc"]
+    C1 --> C2["Store new θ_enc (S3/GCS)"]
+    C2 --> D1
+  end
+
+  subgraph "Phase 2: Head Fine-tuning"
+    D1["Clients download frozen θ_enc"]
+    D2["Local head training"]
+    D3["Compute Δθ_head"]
+    D4["Upload Δθ_head"]
+    D1 --> D2 --> D3 --> D4
+  end
+
+  B --> D5["FedAvg aggregate θ_head"]
+  D5 --> D6["Store new θ_head (S3/GCS)"]
+  D6 --> D1
+```
