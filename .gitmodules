@@ -1,3 +1,4 @@
 [submodule "fl-common"]
 	path = fl-common
 	url = https://github.com/adrianoggm/fl-common
+	branch = main
