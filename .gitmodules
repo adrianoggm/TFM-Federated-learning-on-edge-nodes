@@ -2,3 +2,9 @@
 	path = fl-common
 	url = https://github.com/adrianoggm/fl-common
 	branch = main
+[submodule "fl-server"]
+	path = fl-server
+	url = https://github.com/adrianoggm/fl-server.git
+[submodule "fl-ml-models"]
+	path = fl-ml-models
+	url = https://github.com/adrianoggm/fl-ml-models.git
