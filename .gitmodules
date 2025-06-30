@@ -8,3 +8,6 @@
 [submodule "fl-ml-models"]
 	path = fl-ml-models
 	url = https://github.com/adrianoggm/fl-ml-models.git
+[submodule "fl-client"]
+	path = fl-client
+	url = https://github.com/adrianoggm/fl-client.git
