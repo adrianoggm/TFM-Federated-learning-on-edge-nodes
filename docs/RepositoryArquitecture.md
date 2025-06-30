@@ -160,24 +160,25 @@ fl_server/
 
 ```mermaid
 flowchart TD
-    subgraph CLIENTS
-        direction TB
-        A1[Phase I: pretrain_encoder() - Train encoder locally] --> A2[encrypt & send Δθ_enc - Send to broker]
-        A3[Phase II: finetune_head() - Train head locally]  --> A4[encrypt & send Δθ_head - Send to broker]
-    end
+  subgraph CLIENTS
+    direction TB
+    A1[Phase I: pretrain_encoder<br/>Train encoder locally] --> A2[encrypt & send Δθ_enc<br/>Send to broker]
+    A3[Phase II: finetune_head<br/>Train head locally]     --> A4[encrypt & send Δθ_head<br/>Send to broker]
+  end
 
-    subgraph BROKER["MQTT / gRPC Broker"]
-        A2 -->|topic "encoder/delta"| S1[Orchestrator.collect_encoder_deltas()]
-        A4 -->|topic "head/delta"| S2[Orchestrator.collect_head_deltas()]
-    end
+  subgraph BROKER["MQTT / gRPC Broker"]
+    A2-->|topic encoder/delta|S1[Orchestrator.collect_encoder_deltas]
+    A4-->|topic head/delta|S2[Orchestrator.collect_head_deltas]
+  end
 
-    subgraph SERVER
-        S1 --> AG1[FedAvgAggregator.aggregate_encoder() - Aggregate encoder updates] --> ST1[StorageClient.save_encoder_vX - Persist encoder]
-        ST1 --> ORT1[Orchestrator.notify_phase2() - Trigger Phase II]
+  subgraph SERVER
+    S1-->AG1[FedAvgAggregator.aggregate_encoder<br/>Aggregate encoder updates]-->ST1[StorageClient.save_encoder_vX<br/>Persist encoder]
+    ST1-->ORT1[Orchestrator.notify_phase2<br/>Trigger Phase II]
 
-        S2 --> AG2[FedAvgAggregator.aggregate_head() - Aggregate head updates]   --> ST2[StorageClient.save_full_model_vX - Persist full model]
-        ST2 --> ORT2[Orchestrator.notify_phase1() - Next round]
-    end
+    S2-->AG2[FedAvgAggregator.aggregate_head<br/>Aggregate head updates]-->ST2[StorageClient.save_full_model_vX<br/>Persist full model]
+    ST2-->ORT2[Orchestrator.notify_phase1<br/>Next round]
+  end
+
 ```
 
 ---
