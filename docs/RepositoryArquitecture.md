@@ -41,7 +41,7 @@ These FL paradigms support a wide range of machine learning models, including li
 
 The following figure illustrates the different data partitioning strategies for horizontal, vertical, and federated transfer learning:
 
-![Types of Federated Learning: Horizontal, Vertical, and Transfer Learning](img/Typesfederatedlearning.png)
+![Types of Federated Learning: Horizontal, Vertical, and Transfer Learning](/images/Typesfederatedlearning.png)
 
 *Fig. 2. The different data partition of horizontal federated learning, vertical federated learning, and federated transfer learning. Adapted from C. Zhang, Y. Xie, H. Bai et al., Knowledge-Based Systems 216 (2021) 106775.*
 
