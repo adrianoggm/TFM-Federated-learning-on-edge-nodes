@@ -1,10 +1,49 @@
-# Federated Learning System – Repository Layout & Workflow
+## Introduction: Types of Federated Learning Algorithms
 
-A modular, privacy-preserving FL system for stress detection. The codebase is split into three repositories, each with clear responsibilities:
+Federated learning (FL) enables multiple parties to collaboratively train machine learning models without sharing raw data, thus preserving privacy. According to the distribution patterns of sample space and feature space, FL algorithms are typically categorized into three types:
 
-1. **fl-shared** — Common types, interfaces, and cryptographic utilities  
-2. **fl-client** — Edge device agent for local training and communication  
-3. **fl-server** — Central orchestrator and aggregator  
+- **Horizontal Federated Learning:**  
+  This approach is used when datasets share the same feature space but have different samples (users). For example, two hospitals in different regions collect the same type of patient data but from different individuals. Horizontal FL increases the sample size and is commonly implemented using techniques like secure aggregation, homomorphic encryption, and differential privacy to protect user privacy. Google's Android model update system is a well-known application of this type.
+
+- **Vertical Federated Learning:**  
+  Applied when datasets share the same users but have different feature spaces. For instance, a bank and an e-commerce company in the same city may have overlapping customers but collect different types of information. Vertical FL increases the feature dimension by combining complementary data from different organizations, often using privacy-preserving protocols such as secure entity alignment and encrypted model updates.
+
+- **Federated Transfer Learning:**  
+  Used when both the sample space and feature space overlap little between datasets. In this case, transfer learning techniques are introduced to leverage knowledge from related tasks or domains, enabling effective model training even with limited or non-overlapping data. This is particularly useful when organizations have small datasets or few shared features.
+
+**Privacy Mechanisms:**  
+To further protect sensitive information, federated learning systems employ privacy mechanisms such as model aggregation (to avoid sharing raw data), homomorphic encryption (to allow computation on encrypted data), and differential privacy (to add noise and prevent individual data leakage).
+
+These FL paradigms support a wide range of machine learning models, including linear models, decision trees, and neural networks, and are adaptable to heterogeneous devices and communication architectures.
+---
+
+### Categorization Table
+
+| Categorization                | Methods                        | Advantage                                         | Applications                                      |
+|-------------------------------|-------------------------------|---------------------------------------------------|---------------------------------------------------|
+| **Data partitioning**         | Horizontal federated learning | Increase user sample size                         | Android phone model update; logistic regression    |
+|                               | Vertical federated learning   | Increase feature dimension                        | Decision tree; neural network                     |
+|                               | Federated transfer learning   | Increase user sample size and feature dimension    | Transfer learning                                 |
+| **Privacy mechanism**         | Model aggregation             | Avoid transmitting the original data              | Deep network federation learning; PATE method     |
+|                               | Homomorphic encryption        | Users can calculate and process the encrypted data| Ridge regression; federated learning              |
+|                               | Differential privacy          | Can successfully protect user privacy by adding noise | Traditional machine learning; deep learning    |
+| **Applicable ML model**       | Linear models                 | Concise form, easy to model                       | Linear regression; ridge regression               |
+|                               | Tree models                   | Accurate, stable, and can map non-linear relationships | Classification tree; regression tree          |
+|                               | Neural network models         | Learning capabilities, highly robust and fault-tolerant | Pattern recognition, intelligent control     |
+| **Solving heterogeneity**     | Asynchronous communication    | Solve the problem of communication delay          | Device heterogeneity                              |
+|                               | Sampling                      | Avoid simultaneous training with heterogeneous equipment | Pulling Reduction with Local Compensation (PRLC) |
+|                               | Fault-tolerant Mechanism      | Can prevent the whole system from collapsing      | Redundancy algorithm                              |
+|                               | Heterogeneous Model           | Can solve the corresponding heterogeneous device  | (LG-FEDAVG) algorithm                             |
+
+---
+
+### Data Partitioning in Federated Learning
+
+The following figure illustrates the different data partitioning strategies for horizontal, vertical, and federated transfer learning:
+
+![Types of Federated Learning: Horizontal, Vertical, and Transfer Learning](img/Typesfederatedlearning.png)
+
+*Fig. 2. The different data partition of horizontal federated learning, vertical federated learning, and federated transfer learning. Adapted from C. Zhang, Y. Xie, H. Bai et al., Knowledge-Based Systems 216 (2021) 106775.*
 
 ---
 
