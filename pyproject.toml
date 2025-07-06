@@ -1,0 +1,35 @@
+[tool.black]
+# PEP8 recomienda 79 caracteres de ancho
+line-length = 79
+# Versiones de Python soportadas
+target-version = ["py310"]
+# Solo módulos .py y .pyi
+include = '\.pyi?$'
+# Excluimos directorios de build, entornos virtuales y caches
+exclude = '''
+/(
+  \.eggs
+ | \.git
+ | \.hg
+ | \.mypy_cache
+ | \.tox
+ | \.venv
+ | venv
+ | _build
+ | buck-out
+ | build
+ | dist
+)/
+'''
+
+[tool.isort]
+# Usar el perfil de Black para compatibilidad máxima
+profile = "black"
+# Ajustamos también el ancho de línea
+line_length = 79
+# Forzar coma final en multilínea (mejor diffs)
+include_trailing_comma = true
+# Uso de paréntesis en imports largos
+use_parentheses = true
+# Añadir siempre una línea en blanco antes de comentarios
+ensure_newline_before_comments = true

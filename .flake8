@@ -1,0 +1,28 @@
+[flake8]
+# Longitud máxima de línea (coincide con Black)
+max-line-length = 88
+
+# Ignorar errores que Black suele gestionar:
+#  E203: espaciado antes de ':' en slicing (incompatible con Black)
+#  W503: línea partida después de un operador (recomendado por Black)
+extend-ignore = E203, W503
+
+# Plugins a habilitar (si los tienes instalados):
+#  D → docstrings (flake8-docstrings)
+#  ANN → type annotations (flake8-annotations)
+select = C,E,F,W,B,B950,D,ANN
+
+# Directorios/archivos que no queremos que analice
+exclude =
+    .git,
+    __pycache__,
+    build,
+    dist,
+    .venv,
+    venv,
+    .eggs,
+    *.egg,
+    docs
+
+# Si usas import-order plugin, podrías configurar el estilo:
+# import-order-style = google
