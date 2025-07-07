@@ -61,6 +61,65 @@ Below is a detailed, granular breakdown of all project tasks along with their de
 | **M6**       | Testing & Hardening             | Automated tests in CI, performance tuning, security review, DP/HE validated    | Week 24     |
 | **M7**       | Documentation & Delivery        | User/developer docs, final demos, deployment guides, project closeout         | Week 26     |
 
+## Requisitos Funcionales
+
+1. **Inicialización y Distribución del Modelo**  
+   - El servidor central debe publicar la versión inicial del modelo global (`ModelParameters`) al broker.  
+   - Los clientes deben recibir automáticamente el modelo global al suscribirse al topic `model/distribute`.
+
+2. **Entrenamiento Local**  
+   - Cada cliente debe cargar el modelo recibido y entrenar sobre su dataset local privado durante un número configurable de épocas.  
+   - Debe calcular la pérdida local y generar un delta de pesos (`delta_weights`).
+
+3. **Cifrado y Mensajería Segura**  
+   - Todas las comunicaciones MQTT han de ir cifradas (TLS) entre clientes, broker y servidor.  
+   - Las actualizaciones de cliente (`ClientUpdate`) se publican en `model/updates` con QoS ≥1.
+
+4. **Agregación Parcial en Broker**  
+   - El broker debe consumir mensajes de `model/updates`, deserializar y sumar los `delta_weights` de un batch de clientes.  
+   - Aplicar opcionalmente ruido de Differential Privacy al agregado.  
+   - Publicar el `AggregatedUpdate` resultante en `model/aggregated`.
+
+5. **Agregación Global y Actualización**  
+   - El servidor consume `model/aggregated`, actualiza el estado global del modelo (`W_{t+1} = W_t + η·ΣΔW`) y guarda checkpoint.  
+   - El servidor re-publica el nuevo modelo para la siguiente ronda.
+
+6. **Orquestación de Rondas**  
+   - La API (REST/GraphQL) debe permitir iniciar, detener o inspeccionar el estado de una ronda federada.  
+   - Debe permitir la selección dinámica de clientes (p. ej. por disponibilidad, reputación o calidad de datos).
+
+7. **Monitorización y Métricas**  
+   - Registrar métricas de cada ronda: número de clientes participantes, pérdida global, tiempo de entrenamiento.  
+   - Exponer endpoint para consultar métricas históricas.
+
+8. **Almacenamiento de Checkpoints**  
+   - Guardar automáticamente los checkpoints de modelo en un almacenamiento S3-compatible.  
+   - Permitir recuperar versiones anteriores del modelo.
+
+9. **Gestión de Clientes**  
+   - Registrar nuevos clientes con un identificador único.  
+   - Permitir desuscribir o bloquear clientes (p. ej. por comportamiento malicioso).
+
+10. **Interfaz de Usuario / CLI**  
+    - Proveer un CLI o dashboard mínimo para ver el estado de las rondas, triggers manuales y logs.
+
+---
+
+## Requisitos No Funcionales
+
+| Categoría          | Requisito                                                                                                                                      |
+|--------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Seguridad**      | - Cifrado TLS en todas las comunicaciones.<br>- Private Aggregation y Differential Privacy para proteger datos individuales.<br>- Gestión de claves. |
+| **Escalabilidad**  | - Debe soportar decenas o cientos de clientes concurrentes.<br>- Broker y servidor escalables en Kubernetes.                                      |
+| **Disponibilidad** | - Alta disponibilidad: tolerancia a fallos de nodo (clientes, broker o servidor).<br>- Checkpoints redundantes.                                  |
+| **Rendimiento**    | - Latencia de agregación por ronda < 1 minuto (ajustable).<br>- Soporte para entrenamiento ligero en edge con recursos limitados.               |
+| **Fiabilidad**     | - Retransmisión automática (QoS ≥1) y reintentos ante fallos de comunicación.<br>- Detección y recuperación de procesos colgantes.                |
+| **Portabilidad**   | - Clientes multi-plataforma (Linux, Windows, Android/iOS si aplica).<br>- Contenedores Docker para todos los componentes.                         |
+| **Mantenibilidad** | - Código documentado con docstrings y Sphinx.<br>- Testing unitario y de integración (> 80 % cobertura).                                          |
+| **Extensibilidad** | - Arquitectura modular (plugins de algoritmos federados, optimizadores).<br>- Definición genérica de Protos para nuevos mensajes.                |
+| **Observabilidad** | - Logs estructurados (JSON) y trazabilidad distribuida (p. ej. OpenTelemetry).<br>- Dashboards Grafana/Prometheus.                              |
+| **Cumplimiento**   | - Cumplir regulaciones de privacidad (GDPR, si aplica).                                                                                         |
+
 ---
 
 ## 🔧 Task List
