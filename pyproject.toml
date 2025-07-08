@@ -1,11 +1,11 @@
 [tool.black]
-# PEP8 recomienda 79 caracteres de ancho
-line-length = 79
-# Versiones de Python soportadas
-target-version = ["py310"]
-# Solo módulos .py y .pyi
+# Allow 88 characters (Black's default, more modern than 79)
+line-length = 88
+# Support Python 3.8+
+target-version = ["py38", "py39", "py310", "py311"]
+# Include both .py and .pyi files
 include = '\.pyi?$'
-# Excluimos directorios de build, entornos virtuales y caches
+# Exclude build directories, virtual environments, and caches
 exclude = '''
 /(
   \.eggs
@@ -19,17 +19,85 @@ exclude = '''
  | buck-out
  | build
  | dist
+ | __pycache__
 )/
 '''
 
 [tool.isort]
-# Usar el perfil de Black para compatibilidad máxima
+# Use Black profile for maximum compatibility
 profile = "black"
-# Ajustamos también el ancho de línea
-line_length = 79
-# Forzar coma final en multilínea (mejor diffs)
+# Match Black's line length
+line_length = 88
+# Force trailing comma in multi-line imports (better diffs)
 include_trailing_comma = true
-# Uso de paréntesis en imports largos
+# Use parentheses for long imports
 use_parentheses = true
-# Añadir siempre una línea en blanco antes de comentarios
+# Add blank line before comments
 ensure_newline_before_comments = true
+# Multi-line output mode (compatible with Black)
+multi_line_output = 3
+
+[tool.mypy]
+# Python version to target
+python_version = "3.8"
+# Directories to check (adjust based on actual structure)
+files = [
+    "fl-client/fl_client",
+    "fl-server/fl_server", 
+    "fl-common/src",
+    "fl-ml-models"
+]
+# Type checking strictness
+warn_return_any = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+# Disallow untyped definitions
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+# Show error codes
+show_error_codes = true
+# Don't require return type annotations for __init__ methods
+no_implicit_optional = true
+
+[tool.flake8]
+# Match Black's line length
+max-line-length = 88
+# Ignore some rules that conflict with Black
+ignore = [
+    "E203",  # whitespace before ':'
+    "E501",  # line too long (handled by Black)
+    "W503",  # line break before binary operator
+]
+# Directories to exclude
+exclude = [
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".venv",
+    "venv",
+    ".mypy_cache",
+    ".pytest_cache"
+]
+
+[tool.pytest.ini_options]
+# Test discovery patterns
+testpaths = [
+    "fl-client/tests",
+    "fl-server/tests", 
+    "fl-common/tests",
+    "fl-ml-models/tests"
+]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+# Default options
+addopts = [
+    "--strict-markers",
+    "--strict-config",
+    "--verbose",
+    "--tb=short"
+]
+# Minimum version required
+minversion = "6.0"
