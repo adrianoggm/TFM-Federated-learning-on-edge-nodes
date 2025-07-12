@@ -11,3 +11,6 @@
 [submodule "fl-client"]
 	path = fl-client
 	url = https://github.com/adrianoggm/fl-client.git
+[submodule "fl-fog"]
+	path = fl-fog
+	url = https://github.com/adrianoggm/fl-fog.git
