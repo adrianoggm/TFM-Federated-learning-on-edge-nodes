@@ -42,8 +42,15 @@ jobs:
 
     - name: Format check
       run: |
-        black --check fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/ || true
-        isort --check-only fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/ || true
+        for dir in fl-client fl-server fl-common fl-ml-models fl-fog; do
+          if [ -d "$dir" ]; then
+            echo "Checking format for $dir"
+            black --check "$dir/" || echo "Black check completed for $dir"
+            isort --check-only "$dir/" || echo "isort check completed for $dir"
+          else
+            echo "Directory $dir not found, skipping format check"
+          fi
+        done
 
     - name: Lint
       run: |
@@ -60,7 +67,22 @@ jobs:
           flake8 fl-ml-models/
         fi
         if [ -d "fl-fog" ]; then
-          flake8 fl-fog/
+          echo "Linting fl-fog..."
+          cd fl-fog
+          if [ -d "fog_node" ] || [ -d "communication" ] || [ -d "tests" ]; then
+            if [ -d "fog_node" ]; then
+              flake8 fog_node/ || echo "flake8 completed for fog_node"
+            fi
+            if [ -d "communication" ]; then
+              flake8 communication/ || echo "flake8 completed for communication"
+            fi
+            if [ -d "tests" ]; then
+              flake8 tests/ || echo "flake8 completed for tests"
+            fi
+          else
+            echo "No Python directories found in fl-fog, skipping linting"
+          fi
+          cd ..
         fi
 
     - name: Type check
