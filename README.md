@@ -150,9 +150,16 @@ graph TB
 
 ### 1️⃣ **Clone the Project**
 ```bash
-git clone https://github.com/adrianoggm/TFM-Federated-learning-on-edge-nodes.git
+# Clone with all submodules (recommended)
+git clone --recursive https://github.com/adrianoggm/TFM-Federated-learning-on-edge-nodes.git
 cd TFM-Federated-learning-on-edge-nodes
+
+# OR if already cloned, initialize submodules
 git submodule update --init --recursive
+
+# OR use the management script for easy setup
+./submodule-manager.sh setup    # Linux/Mac
+./submodule-manager.ps1 setup   # Windows
 ```
 
 ### 2️⃣ **Set Up Environment**
@@ -160,7 +167,14 @@ git submodule update --init --recursive
 # Install dependencies
 pip install -r requirements.txt
 
-# Or use Poetry (recommended)
+# Install dependencies for all submodules
+for dir in fl-common fl-fog fl-client fl-server fl-ml-models; do
+    if [ -f "$dir/requirements.txt" ]; then
+        pip install -r "$dir/requirements.txt"
+    fi
+done
+
+# OR use Poetry (recommended)
 poetry install
 ```
 
@@ -211,6 +225,7 @@ python scripts/monitor_training.py
 - 📖 **[Complete System Overview](docs/SystemOverview.md)** - Detailed architecture and design decisions
 - 📊 **[Datasets Documentation](docs/datasets.md)** - WESAD, SWEET, and other stress detection datasets
 - 📝 **[Research Bibliography](docs/Bibliography.md)** - Related work and literature review
+- 🔗 **[Submodule Management](SUBMODULES.md)** - Guide for working with Git submodules
 
 ---
 
