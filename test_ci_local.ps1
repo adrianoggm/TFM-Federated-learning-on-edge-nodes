@@ -85,7 +85,7 @@ try {
 }
 
 # Install project dependencies
-$projects = @("fl-client", "fl-server", "fl-common", "fl-ml-models")
+$projects = @("fl-client", "fl-server", "fl-common", "fl-ml-models", "fl-fog")
 foreach ($dir in $projects) {
     if ((Test-Path $dir) -and (Test-Path "$dir/requirements.txt")) {
         Write-Host "   Installing $dir dependencies..."
@@ -239,6 +239,16 @@ if (Test-Path "fl-ml-models") {
     }
 }
 
+if (Test-Path "fl-fog/fog_node") {
+    Write-Host "   Type checking fl-fog..."
+    $mypyResult = & mypy "fl-fog/fog_node" "fl-fog/communication" 2>&1
+    if ($LASTEXITCODE -ne 0) {
+        Write-Warning "Type checking issues in fl-fog/"
+        if ($Verbose) { Write-Host $mypyResult }
+        $typeIssues++
+    }
+}
+
 if ($typeIssues -eq 0) {
     Write-Status "All type checks passed"
 } else {
@@ -298,10 +308,10 @@ if ($totalIssues -eq 0) {
 
 Write-Host ""
 Write-Host "🔧 Quick fixes:" -ForegroundColor Cyan
-Write-Host "  Format code: black fl-client/ fl-server/ fl-common/ fl-ml-models/"
-Write-Host "  Sort imports: isort fl-client/ fl-server/ fl-common/ fl-ml-models/"
-Write-Host "  Check linting: flake8 fl-client/ fl-server/ fl-common/ fl-ml-models/"
-Write-Host "  Check types: mypy fl-client/fl_client fl-server/fl_server fl-common/src fl-ml-models"
+Write-Host "  Format code: black fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/"
+Write-Host "  Sort imports: isort fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/"
+Write-Host "  Check linting: flake8 fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/"
+Write-Host "  Check types: mypy fl-client/fl_client fl-server/fl_server fl-common/src fl-ml-models fl-fog/fog_node fl-fog/communication"
 Write-Host "  Run tests: cd [project]; python -m pytest tests/"
 Write-Host ""
 Write-Host "  Or run this script with -Fix to automatically fix formatting issues"

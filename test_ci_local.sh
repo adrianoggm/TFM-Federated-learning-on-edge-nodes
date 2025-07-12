@@ -41,7 +41,7 @@ python -m pip install --upgrade pip > /dev/null 2>&1
 pip install black isort flake8 mypy pytest > /dev/null 2>&1
 
 # Install project dependencies
-for dir in fl-client fl-server fl-common fl-ml-models; do
+for dir in fl-client fl-server fl-common fl-ml-models fl-fog; do
     if [ -d "$dir" ] && [ -f "$dir/requirements.txt" ]; then
         echo "   Installing $dir dependencies..."
         pip install -r "$dir/requirements.txt" > /dev/null 2>&1 || print_warning "Some dependencies for $dir failed to install"
@@ -62,7 +62,7 @@ echo "----------------------------"
 # Format check
 format_issues=0
 
-for dir in fl-client fl-server fl-common fl-ml-models; do
+for dir in fl-client fl-server fl-common fl-ml-models fl-fog; do
     if [ -d "$dir" ]; then
         echo "   Checking $dir formatting..."
         if ! black --check "$dir/" > /dev/null 2>&1; then
@@ -81,8 +81,8 @@ if [ $format_issues -eq 0 ]; then
     print_status "All formatting checks passed"
 else
     print_warning "$format_issues formatting issues found"
-    echo "   Run 'black fl-client/ fl-server/ fl-common/ fl-ml-models/' to fix"
-    echo "   Run 'isort fl-client/ fl-server/ fl-common/ fl-ml-models/' to fix imports"
+    echo "   Run 'black fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/' to fix"
+    echo "   Run 'isort fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/' to fix imports"
 fi
 
 echo ""
@@ -92,7 +92,7 @@ echo "--------------------"
 # Linting
 lint_issues=0
 
-for dir in fl-client fl-server fl-common fl-ml-models; do
+for dir in fl-client fl-server fl-common fl-ml-models fl-fog; do
     if [ -d "$dir" ]; then
         echo "   Linting $dir..."
         if ! flake8 "$dir/" > /dev/null 2>&1; then
@@ -147,6 +147,14 @@ if [ -d "fl-ml-models" ]; then
     fi
 fi
 
+if [ -d "fl-fog/fog_node" ]; then
+    echo "   Type checking fl-fog..."
+    if ! mypy fl-fog/fog_node fl-fog/communication > /dev/null 2>&1; then
+        print_warning "Type checking issues in fl-fog/"
+        type_issues=$((type_issues + 1))
+    fi
+fi
+
 if [ $type_issues -eq 0 ]; then
     print_status "All type checks passed"
 else
@@ -160,7 +168,7 @@ echo "------------------"
 # Testing
 test_issues=0
 
-for dir in fl-client fl-server fl-common fl-ml-models; do
+for dir in fl-client fl-server fl-common fl-ml-models fl-fog; do
     if [ -d "$dir/tests" ]; then
         echo "   Running tests in $dir..."
         if ! (cd "$dir" && python -m pytest tests/ --maxfail=1 --disable-warnings -q > /dev/null 2>&1); then
@@ -199,10 +207,10 @@ fi
 
 echo ""
 echo "🔧 Quick fixes:"
-echo "  Format code: black fl-client/ fl-server/ fl-common/ fl-ml-models/"
-echo "  Sort imports: isort fl-client/ fl-server/ fl-common/ fl-ml-models/"
-echo "  Check linting: flake8 fl-client/ fl-server/ fl-common/ fl-ml-models/"
-echo "  Check types: mypy fl-client/fl_client fl-server/fl_server fl-common/src fl-ml-models"
+echo "  Format code: black fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/"
+echo "  Sort imports: isort fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/"
+echo "  Check linting: flake8 fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/"
+echo "  Check types: mypy fl-client/fl_client fl-server/fl_server fl-common/src fl-ml-models fl-fog/fog_node fl-fog/communication"
 echo "  Run tests: cd <project> && python -m pytest tests/"
 
 exit $total_issues

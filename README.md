@@ -37,22 +37,31 @@ graph TB
         C[⌚ Smartwatch] --> F[🔗 FL Agent]
     end
     
-    subgraph "Secure Communication"
-        D --> G[🛡️ MQTT/gRPC Broker]
+    subgraph "Fog Computing Layer"
+        D --> G[🌫️ Regional Fog Node]
         E --> G
         F --> G
+        G --> H[🧠 Partial Aggregator]
+        G --> I[💾 Model Cache]
+        G --> J[📊 Resource Manager]
+    end
+    
+    subgraph "Secure Communication"
+        G --> K[🛡️ MQTT/gRPC Broker]
     end
     
     subgraph "Cloud Infrastructure"
-        G --> H[🧠 FL Aggregator]
-        H --> I[📊 Model Registry]
-        H --> J[🔐 Security Manager]
+        K --> L[🧠 Global FL Aggregator]
+        L --> M[📊 Model Registry]
+        L --> N[🔐 Security Manager]
+        L --> O[🌐 Orchestrator]
     end
     
     style A fill:#e1f5fe
     style B fill:#e8f5e8
     style C fill:#fff3e0
-    style H fill:#f3e5f5
+    style G fill:#f0f4c3
+    style L fill:#f3e5f5
 ```
 
 ---
@@ -113,6 +122,11 @@ graph TB
 │   ├── protocols/                    # Communication protocols
 │   ├── security/                     # Encryption & privacy utils
 │   └── utils/                        # Common utilities
+│
+├── 🌫️ fl-fog/                        # Fog computing layer
+│   ├── fog_node/                     # Regional fog orchestrator
+│   ├── communication/                # Multi-tier communication
+│   └── config/                       # Fog configuration
 │
 ├── 🤖 fl-ml-models/                  # ML model implementations
 │   ├── stress_detection/             # Stress classification models

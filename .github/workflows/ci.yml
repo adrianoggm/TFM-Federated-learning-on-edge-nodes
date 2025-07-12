@@ -33,14 +33,17 @@ jobs:
         if [ -f "fl-ml-models/requirements.txt" ]; then
           pip install -r fl-ml-models/requirements.txt || true
         fi
+        if [ -f "fl-fog/requirements.txt" ]; then
+          pip install -r fl-fog/requirements.txt || true
+        fi
         if [ -f "requirements.txt" ]; then
           pip install -r requirements.txt || true
         fi
 
     - name: Format check
       run: |
-        black --check fl-client/ fl-server/ fl-common/ fl-ml-models/ || true
-        isort --check-only fl-client/ fl-server/ fl-common/ fl-ml-models/ || true
+        black --check fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/ || true
+        isort --check-only fl-client/ fl-server/ fl-common/ fl-ml-models/ fl-fog/ || true
 
     - name: Lint
       run: |
@@ -55,6 +58,9 @@ jobs:
         fi
         if [ -d "fl-ml-models" ]; then
           flake8 fl-ml-models/
+        fi
+        if [ -d "fl-fog" ]; then
+          flake8 fl-fog/
         fi
 
     - name: Type check
@@ -79,6 +85,11 @@ jobs:
           echo "Type checking fl-ml-models..."
           python -m mypy fl-ml-models --ignore-missing-imports || echo "Type checking skipped for fl-ml-models"
         fi
+        if [ -d "fl-fog/fog_node" ]; then
+          echo "Type checking fl-fog..."
+          cd fl-fog && (python -m mypy fog_node communication --ignore-missing-imports || echo "Type checking skipped for fl-fog")
+          cd ..
+        fi
 
     - name: Run tests
       run: |
@@ -96,5 +107,9 @@ jobs:
         fi
         if [ -d "fl-ml-models/tests" ]; then
           cd fl-ml-models && python -m pytest tests/ --maxfail=1 --disable-warnings -q || true
+          cd ..
+        fi
+        if [ -d "fl-fog/tests" ]; then
+          cd fl-fog && python -m pytest tests/ --maxfail=1 --disable-warnings -q || true
           cd ..
         fi
